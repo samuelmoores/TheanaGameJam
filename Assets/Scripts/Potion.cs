@@ -19,7 +19,14 @@ public class Potion : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
 
-        Debug.Log("Trigger");
+        if(other.gameObject.CompareTag("Player"))
+        {
+            GameObject.Find("Camera_Player").GetComponent<Camera>().enabled = false;
+            GameObject.Find("Camera_Cell").GetComponent<Camera>().enabled = true;
+            GameObject.Find("OrbOverlay").GetComponent<Canvas>().enabled = true;
+        }
+
+
 
     }
 

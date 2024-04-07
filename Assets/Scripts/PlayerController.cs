@@ -19,19 +19,25 @@ public class PlayerController : MonoBehaviour
         float verticalInput = Input.GetAxisRaw("Vertical");
         float horizontalInput = Input.GetAxisRaw("Horizontal");
 
-        Vector3 movementDirection = new Vector3(horizontalInput, 0, verticalInput);
+        Vector3 movementDirection = new Vector3(0, 0, verticalInput);
         movementDirection.Normalize();
 
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
         {
-            transform.Translate(movementDirection * playerSpeed * Time.deltaTime, Space.World);
-     
+            transform.Translate(transform.forward * verticalInput * playerSpeed * Time.deltaTime, Space.World);
+
         }
 
-        if(movementDirection != Vector3.zero)
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A))
         {
-            Quaternion newRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, newRotation, rotationSpeed * Time.deltaTime);
+            transform.Rotate(Vector3.up, horizontalInput * rotationSpeed * Time.deltaTime);
+
+        }
+
+        if (movementDirection != Vector3.zero)
+        {
+            //Quaternion newRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
+            //transform.rotation = Quaternion.RotateTowards(transform.rotation, newRotation, rotationSpeed * Time.deltaTime);
         }
 
     }
