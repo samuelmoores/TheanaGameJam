@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Potion : MonoBehaviour
 {
+
+    public bool consumed = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +27,8 @@ public class Potion : MonoBehaviour
             GameObject.Find("Camera_Player").GetComponent<Camera>().enabled = false;
             GameObject.Find("Camera_Cell").GetComponent<Camera>().enabled = true;
             GameObject.Find("OrbOverlay").GetComponent<Canvas>().enabled = true;
+
+            consumed = true;
         }
 
 
