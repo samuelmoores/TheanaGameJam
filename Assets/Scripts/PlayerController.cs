@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public Animator animator;
+
     public float playerSpeed;
     public float rotationSpeed;
+
+    [HideInInspector] public bool isInfected;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        animator = GetComponent<Animator>();
+        isInfected = false;
     }
 
     // Update is called once per frame
@@ -22,9 +27,10 @@ public class PlayerController : MonoBehaviour
         Vector3 movementDirection = new Vector3(0, 0, verticalInput);
         movementDirection.Normalize();
 
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.W))
         {
             transform.Translate(transform.forward * verticalInput * playerSpeed * Time.deltaTime, Space.World);
+
 
         }
 
@@ -34,10 +40,21 @@ public class PlayerController : MonoBehaviour
 
         }
 
-        if (movementDirection != Vector3.zero)
+        if (movementDirection.z > 0.0f)
         {
-            //Quaternion newRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
-            //transform.rotation = Quaternion.RotateTowards(transform.rotation, newRotation, rotationSpeed * Time.deltaTime);
+            animator.SetBool("isWalking", true);
+
+        }
+        else
+        {
+            animator.SetBool("isWalking", false);
+
+        }
+
+        if (isInfected)
+        {
+            playerSpeed = 0.75f;
+            animator.SetBool("isInfected", true);
         }
 
     }

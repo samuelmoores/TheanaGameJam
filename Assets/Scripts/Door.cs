@@ -6,23 +6,29 @@ public class Door : MonoBehaviour
 {
 
     public Potion startPotion;
+    GameObject DoorHinge;
+    int newRot;
 
     // Start is called before the first frame update
     void Start()
     {
-        GetComponent<MeshRenderer>().enabled = false;
+        newRot = 0;
+
+        DoorHinge = GameObject.Find("DoorHinge");
+
     }
 
     // Update is called once per frame
     void Update()
     {
 
-
         if (startPotion.consumed)
         {
-            GetComponent<MeshRenderer>().enabled = true;
-            Debug.Log("Consumed");
+            newRot++;
 
+            DoorHinge.transform.Rotate(Vector3.up, 5 * Time.deltaTime);
         }
+
     }
+
 }
