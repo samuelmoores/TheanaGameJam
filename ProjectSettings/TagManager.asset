@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Potion
+  - Hallway
+  - Cell
+  - Guard
   layers:
   - Default
   - TransparentFX

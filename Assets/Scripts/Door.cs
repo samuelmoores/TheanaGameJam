@@ -7,12 +7,10 @@ public class Door : MonoBehaviour
 
     public Potion startPotion;
     GameObject DoorHinge;
-    int newRot;
 
     // Start is called before the first frame update
     void Start()
     {
-        newRot = 0;
 
         DoorHinge = GameObject.Find("DoorHinge");
 
@@ -24,9 +22,11 @@ public class Door : MonoBehaviour
 
         if (startPotion.consumed)
         {
-            newRot++;
+            if(DoorHinge.transform.rotation.y < 0.95f)
+            {
+                DoorHinge.transform.Rotate(Vector3.up, 5 * Time.deltaTime);
 
-            DoorHinge.transform.Rotate(Vector3.up, 5 * Time.deltaTime);
+            }
         }
 
     }
