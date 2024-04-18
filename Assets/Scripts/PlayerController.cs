@@ -65,8 +65,8 @@ public class PlayerController : MonoBehaviour
 
         if (isInfected)
         {
-            playerSpeed = 0.75f;
-            animator.SetBool("isInfected", true);
+            //playerSpeed = 0.75f;
+            //animator.SetBool("isInfected", true);
         }
 
     }
