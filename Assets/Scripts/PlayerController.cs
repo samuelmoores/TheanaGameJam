@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
 
 
     [HideInInspector] public bool isInfected;
+    [HideInInspector] public bool shaking = false;
 
     // Start is called before the first frame update
     void Start()
@@ -38,7 +39,7 @@ public class PlayerController : MonoBehaviour
 
 
         // Forward Movement
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.W) && !shaking)
         {
             transform.Translate(transform.forward * verticalInput * playerSpeed * Time.deltaTime, Space.World);
 
@@ -52,7 +53,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //Set animations
-        if (movementDirection.z > 0.0f)
+        if (movementDirection.z > 0.0f && !shaking)
         {
             animator.SetBool("isWalking", true);
 
@@ -60,6 +61,23 @@ public class PlayerController : MonoBehaviour
         else
         {
             animator.SetBool("isWalking", false);
+
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            animator.SetBool("Shake", true);
+            animator.SetBool("isWalking", false);
+
+            shaking = true;
+        }
+
+        if(Input.GetKeyUp(KeyCode.Space))
+        {
+            animator.SetBool("Shake", false);
+            animator.SetBool("isWalking", false);
+
+            shaking = false;
 
         }
 
