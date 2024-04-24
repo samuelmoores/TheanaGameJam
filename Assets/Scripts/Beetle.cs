@@ -14,9 +14,13 @@ public class Beetle : MonoBehaviour
     public Transform attachmentPoint;
     bool attachedToPlayer = false;
     public GameObject DeadBeetle;
+    public GameObject RespawnBeetle;
+    GameObject RespawnBeetleInstance;
     GameObject DeadBeetleInstance;
-    public Transform spawnTransform;
     bool playerFound = false;
+    public Vector3 respawnPosition;
+
+    Quaternion startRot;
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +32,12 @@ public class Beetle : MonoBehaviour
         agent.speed = Random.Range(0.5f, 4.0f);
         agent.angularSpeed = Random.Range(110, 130);
         agent.acceleration = Random.Range(1, 5);
+
+        startRot = transform.rotation;
+
+        Debug.Log("\n");
+
+        //Debug.Log("Start position: " + respawnLocation.position);
 
     }
 
@@ -58,14 +68,25 @@ public class Beetle : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Space) && attachedToPlayer)
         {
-            Debug.Log("Spawn");
-
+            attachedToPlayer = false;
             GetComponent<BoxCollider>().enabled = false;
             GetComponent<NavMeshAgent>().enabled = false;
 
-            DeadBeetleInstance = GameObject.Instantiate(DeadBeetle, transform.position, transform.rotation);
-            DeadBeetleInstance.GetComponent<Rigidbody>().AddForce(transform.up * 100);
-            Destroy(DeadBeetleInstance, 5);
+            //Debug.Log("Spawn position (respawn): " + respawnLocation.position);
+
+
+            Debug.Log("Spawn position (DeadBeetle): " + DeadBeetle.transform.position);
+            Debug.Log("\n");
+
+            DeadBeetleInstance = GameObject.Instantiate(DeadBeetle, attachmentPoint.position, attachmentPoint.rotation);
+
+            RespawnBeetleInstance = GameObject.Instantiate(RespawnBeetle, respawnPosition, startRot);
+
+            RespawnBeetleInstance.GetComponent<BoxCollider>().enabled = true;
+            RespawnBeetleInstance.GetComponent<NavMeshAgent>().enabled = true;
+
+            Destroy(DeadBeetleInstance, 3);
+
 
             Destroy(gameObject);
         }
