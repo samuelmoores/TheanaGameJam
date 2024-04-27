@@ -30,7 +30,6 @@ public class Beetle : MonoBehaviour
         playerController = Player.GetComponent<PlayerController>();
         startRot = transform.rotation;
         spawnPosition = transform.position;
-       
 
         //init AI
         agent = GetComponent<NavMeshAgent>();
@@ -49,26 +48,21 @@ public class Beetle : MonoBehaviour
         float chaseDistance_begin = 5.0f;
         playerShakeTimer = playerController.shakeTimer;
 
-        Debug.Log(playerShakeTimer);
+        Debug.Log(distanceFromPlayer);
 
         //attach to player
-        if (distanceFromPlayer < attachDistance && playerShakeTimer > 0.0f)
+        if ((distanceFromPlayer < attachDistance && playerShakeTimer > 0.0f))
         {
-            //Debug.Log("Attach");
-
             AttachToPlayer();
         }
         else if ((distanceFromPlayer < chaseDistance_begin || playerFound) && !attachedToPlayer)
         {
-            //Debug.Log("Chase");
             ChasePlayer();
         }
 
         //detach from player
         if(attachedToPlayer && playerShakeTimer <= 0.0f)
         {
-            Debug.Log("Detach");
-
             DetachFromPlayer();
         }
 
@@ -84,11 +78,15 @@ public class Beetle : MonoBehaviour
     private void AttachToPlayer()
     {
         attachedToPlayer = true;
-        transform.position = attachmentPoint.position;
-        transform.rotation = attachmentPoint.transform.rotation;
-        transform.Rotate(0, -90.0f, 180.0f);
+        agent.enabled = false;
 
-        GetComponent<BoxCollider>().enabled = false;
+        //set transform
+        transform.position = attachmentPoint.position;
+        transform.rotation = attachmentPoint.rotation;
+        transform.Rotate(0, -90.0f, 180.0f);
+        transform.SetParent(attachmentPoint);
+
+        GetComponent<BoxCollider>().isTrigger = true;
         playerController.isInfected = true;
     }
 
@@ -102,6 +100,7 @@ public class Beetle : MonoBehaviour
 
         //respawn new beetle that automatically chases player
         RespawnBeetleInstance = GameObject.Instantiate(RespawnBeetle, spawnPosition, startRot);
+        RespawnBeetleInstance.GetComponent<NavMeshAgent>().enabled = true;
 
         Destroy(gameObject);
     }
@@ -116,4 +115,6 @@ public class Beetle : MonoBehaviour
 
         Destroy(DeadBeetleInstance, 3);
     }
+
+    
 }

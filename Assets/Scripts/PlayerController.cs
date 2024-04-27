@@ -9,38 +9,58 @@ public class PlayerController : MonoBehaviour
     public Camera GuardCamera;
 
     Animator animator;
+    Collider[] ragdollColliders;
 
     public float playerSpeed;
     public float rotationSpeed;
-    public float defaultHealth;
-    float currentHealth;
 
+    [HideInInspector] public float currentHealth;
     [HideInInspector] public bool inCell;
     [HideInInspector] public bool inHallway;
     [HideInInspector] public bool inGuardRoom;
     [HideInInspector] public float shakeTimer;
+    [HideInInspector] public bool isDead;
+
 
     [HideInInspector] public bool isInfected;
     [HideInInspector] public bool shaking = false;
+
+    bool ragDoll = false;
 
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
         isInfected = false;
-        currentHealth = defaultHealth;
+        currentHealth = 1.0f;
         shakeTimer = 1.0f;
+        ragdollColliders = this.gameObject.GetComponentsInChildren<Collider>();
+
+        DisableRagDoll();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(!isDead)
+        {
+            Move();
+            SetShakeParasites();
+            SetInfected();
+        }
+        else if(ragDoll)
+        {
+            EnableRagDoll();
+            ragDoll = false;
+        }
 
-        Move();
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            isDead = true;
+            EnableRagDoll();
 
-        SetShakeParasites();
-
-        SetInfected();
+        }
 
     }
 
@@ -148,12 +168,57 @@ public class PlayerController : MonoBehaviour
         {
             playerSpeed = 0.75f;
             animator.SetBool("isInfected", true);
-            currentHealth -= 0.5f * Time.deltaTime;
+
+            //take damage
+            if(currentHealth > 0)
+            {
+                currentHealth -= 0.1f * Time.deltaTime;
+            }
+            else
+            {
+                currentHealth = 0.0f;
+                isDead = true;
+                ragDoll = true;
+            }
         }
         else
         {
+            //un-infect
             playerSpeed = 5.0f;
             animator.SetBool("isInfected", false);
+        }
+    }
+
+    private void DisableRagDoll()
+    {
+        foreach (Collider collider in ragdollColliders)
+        {
+            if(collider.gameObject != this.gameObject)
+            {
+                collider.isTrigger = true;
+            }
+            
+        }
+
+    }
+
+    private void EnableRagDoll()
+    {
+        animator.enabled = false;
+        animator.avatar = null;
+        GetComponent<CapsuleCollider>().isTrigger = true;
+        GetComponent<Rigidbody>().useGravity = false;
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+        playerSpeed = 0.0f;
+
+        foreach (Collider collider in ragdollColliders)
+        {
+            if (collider.gameObject != this.gameObject)
+            {
+                collider.isTrigger = false;
+                collider.attachedRigidbody.velocity = Vector3.zero;
+            }
+
         }
     }
 }

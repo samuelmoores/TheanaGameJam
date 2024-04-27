@@ -27,7 +27,7 @@ public class Potion : MonoBehaviour
 
             GameObject.Find("Camera_Player").GetComponent<Camera>().enabled = false;
             GameObject.Find("Camera_Cell").GetComponent<Camera>().enabled = true;
-            GameObject.Find("OrbOverlay").GetComponent<Canvas>().enabled = true;
+            GameObject.Find("Canvas").GetComponent<Canvas>().enabled = true;
 
             GameObject.Find("Dungeon_Wall").GetComponent<MeshRenderer>().enabled = false;
             GameObject.Find("Dungeon_Wall").GetComponent<BoxCollider>().enabled = false;
