@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: f880bb72d89fc0a499c564c98c89787a
+guid: 22d94fc5708fbbd4892c8f67da91916e
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -33,11 +33,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Prisoner_Walk
+      name: Guard_Attack
       takeName: Take 001
       internalID: 1827226128182048838
       firstFrame: 0
-      lastFrame: 60
+      lastFrame: 24
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

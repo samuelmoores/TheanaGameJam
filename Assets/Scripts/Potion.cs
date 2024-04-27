@@ -23,7 +23,7 @@ public class Potion : MonoBehaviour
 
         if(other.gameObject.CompareTag("Player"))
         {
-            GameObject.Find("Prisoner").GetComponent<PlayerController>().isInfected = true;
+            //GameObject.Find("Prisoner").GetComponent<PlayerController>().isInfected = true;
 
             GameObject.Find("Camera_Player").GetComponent<Camera>().enabled = false;
             GameObject.Find("Camera_Cell").GetComponent<Camera>().enabled = true;

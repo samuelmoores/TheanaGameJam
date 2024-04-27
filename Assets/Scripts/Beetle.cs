@@ -8,88 +8,112 @@ using UnityEngine.UIElements;
 
 public class Beetle : MonoBehaviour
 {
-    private GameObject Player;
-    private PlayerController playerController;
-    private NavMeshAgent agent;
+    [HideInInspector] public bool playerFound = true;
     public Transform attachmentPoint;
-    bool attachedToPlayer = false;
     public GameObject DeadBeetle;
     public GameObject RespawnBeetle;
-    GameObject RespawnBeetleInstance;
-    GameObject DeadBeetleInstance;
-    bool playerFound = false;
-    public Vector3 respawnPosition;
 
+    GameObject Player;
+    PlayerController playerController;
+    NavMeshAgent agent;
+    GameObject DeadBeetleInstance;
+    GameObject RespawnBeetleInstance;
+    bool attachedToPlayer = false;
+    Vector3 spawnPosition;
     Quaternion startRot;
+    float playerShakeTimer;
 
     // Start is called before the first frame update
     void Start()
     {
         Player = GameObject.Find("Prisoner");
         playerController = Player.GetComponent<PlayerController>();
+        startRot = transform.rotation;
+        spawnPosition = transform.position;
+       
 
+        //init AI
         agent = GetComponent<NavMeshAgent>();
         agent.speed = Random.Range(0.5f, 4.0f);
         agent.angularSpeed = Random.Range(110, 130);
         agent.acceleration = Random.Range(1, 5);
-
-        startRot = transform.rotation;
-
-        Debug.Log("\n");
-
-        //Debug.Log("Start position: " + respawnLocation.position);
 
     }
 
     // Update is called once per frame
     void Update()
     {
-
         float distanceFromPlayer = Vector3.Distance(transform.position, Player.transform.position);
 
         float attachDistance = 1.0f;
-        float chaseDistance = 5.0f;
+        float chaseDistance_begin = 5.0f;
+        playerShakeTimer = playerController.shakeTimer;
+
+        Debug.Log(playerShakeTimer);
 
         //attach to player
-        if (distanceFromPlayer < attachDistance && !playerController.shaking)
+        if (distanceFromPlayer < attachDistance && playerShakeTimer > 0.0f)
         {
-            attachedToPlayer = true;
-            transform.position = attachmentPoint.position;
-            transform.rotation = attachmentPoint.transform.rotation;
-            transform.Rotate(0, -90.0f, 180.0f);
+            //Debug.Log("Attach");
 
-            GetComponent<BoxCollider>().enabled = false;
+            AttachToPlayer();
         }
-        else if (distanceFromPlayer < chaseDistance || playerFound)
+        else if ((distanceFromPlayer < chaseDistance_begin || playerFound) && !attachedToPlayer)
         {
-            playerFound = true;
-            agent.destination = Player.transform.position;
+            //Debug.Log("Chase");
+            ChasePlayer();
         }
 
-        if(Input.GetKeyDown(KeyCode.Space) && attachedToPlayer)
+        //detach from player
+        if(attachedToPlayer && playerShakeTimer <= 0.0f)
         {
-            attachedToPlayer = false;
-            GetComponent<BoxCollider>().enabled = false;
-            GetComponent<NavMeshAgent>().enabled = false;
+            Debug.Log("Detach");
 
-            //Debug.Log("Spawn position (respawn): " + respawnLocation.position);
-
-
-            Debug.Log("Spawn position (DeadBeetle): " + DeadBeetle.transform.position);
-            Debug.Log("\n");
-
-            DeadBeetleInstance = GameObject.Instantiate(DeadBeetle, attachmentPoint.position, attachmentPoint.rotation);
-
-            RespawnBeetleInstance = GameObject.Instantiate(RespawnBeetle, respawnPosition, startRot);
-
-            RespawnBeetleInstance.GetComponent<BoxCollider>().enabled = true;
-            RespawnBeetleInstance.GetComponent<NavMeshAgent>().enabled = true;
-
-            Destroy(DeadBeetleInstance, 3);
-
-
-            Destroy(gameObject);
+            DetachFromPlayer();
         }
 
+
+    }
+
+    private void ChasePlayer()
+    {
+        playerFound = true;
+        agent.destination = Player.transform.position;
+    }
+
+    private void AttachToPlayer()
+    {
+        attachedToPlayer = true;
+        transform.position = attachmentPoint.position;
+        transform.rotation = attachmentPoint.transform.rotation;
+        transform.Rotate(0, -90.0f, 180.0f);
+
+        GetComponent<BoxCollider>().enabled = false;
+        playerController.isInfected = true;
+    }
+
+    private void DetachFromPlayer()
+    {
+        //spawn dead beetle
+        SpawnDeadBeetle();
+
+        //disinfect player
+        playerController.isInfected = false;
+
+        //respawn new beetle that automatically chases player
+        RespawnBeetleInstance = GameObject.Instantiate(RespawnBeetle, spawnPosition, startRot);
+
+        Destroy(gameObject);
+    }
+
+    private void SpawnDeadBeetle()
+    {
+        attachedToPlayer = false;
+        DeadBeetleInstance = GameObject.Instantiate(DeadBeetle, attachmentPoint.position, attachmentPoint.rotation);
+        DeadBeetleInstance.GetComponent<Rigidbody>().AddForce(transform.right * 5.0f, ForceMode.Impulse);
+        DeadBeetleInstance.GetComponent<BoxCollider>().enabled = true;
+        DeadBeetleInstance.GetComponent<CapsuleCollider>().enabled = true;
+
+        Destroy(DeadBeetleInstance, 3);
     }
 }
