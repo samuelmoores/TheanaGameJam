@@ -55,13 +55,6 @@ public class PlayerController : MonoBehaviour
             ragDoll = false;
         }
 
-        if(Input.GetKeyDown(KeyCode.E))
-        {
-            isDead = true;
-            EnableRagDoll();
-
-        }
-
     }
 
     private void OnTriggerEnter(Collider other)

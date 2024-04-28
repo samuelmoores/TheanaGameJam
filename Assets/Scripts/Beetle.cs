@@ -33,9 +33,9 @@ public class Beetle : MonoBehaviour
 
         //init AI
         agent = GetComponent<NavMeshAgent>();
-        agent.speed = Random.Range(0.5f, 4.0f);
-        agent.angularSpeed = Random.Range(110, 130);
-        agent.acceleration = Random.Range(1, 5);
+        agent.speed = Random.Range(0.5f, 2.0f);
+        agent.angularSpeed = Random.Range(300, 350);
+        agent.acceleration = Random.Range(1, 2);
 
     }
 
@@ -45,7 +45,7 @@ public class Beetle : MonoBehaviour
         float distanceFromPlayer = Vector3.Distance(transform.position, Player.transform.position);
 
         float attachDistance = 1.0f;
-        float chaseDistance_begin = 5.0f;
+        float chaseDistance_begin = 10.0f;
         playerShakeTimer = playerController.shakeTimer;
 
         Debug.Log(distanceFromPlayer);
