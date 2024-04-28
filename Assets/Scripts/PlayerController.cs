@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public bool isInfected;
     [HideInInspector] public bool shaking = false;
 
-    bool ragDoll = false;
+    bool ragDoll = true;
 
     // Start is called before the first frame update
     void Start()
@@ -165,7 +165,7 @@ public class PlayerController : MonoBehaviour
             //take damage
             if(currentHealth > 0)
             {
-                currentHealth -= 0.1f * Time.deltaTime;
+                currentHealth -= 0.05f * Time.deltaTime;
             }
             else
             {

@@ -48,8 +48,6 @@ public class Beetle : MonoBehaviour
         float chaseDistance_begin = 10.0f;
         playerShakeTimer = playerController.shakeTimer;
 
-        Debug.Log(distanceFromPlayer);
-
         //attach to player
         if ((distanceFromPlayer < attachDistance && playerShakeTimer > 0.0f))
         {
