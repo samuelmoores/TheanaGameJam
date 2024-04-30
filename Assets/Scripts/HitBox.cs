@@ -25,7 +25,6 @@ public class HitBox : MonoBehaviour
         {
             attackCooldown = 2.0f;
         }
-        Debug.Log(attackCooldown);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -37,7 +36,7 @@ public class HitBox : MonoBehaviour
             if(Player.currentHealth > 0.0f)
             {
                 //damage player
-                Player.currentHealth -= 0.25f;
+                Player.currentHealth -= 0.1f;
 
                 //is player dead?
                 if (Player.currentHealth <= 0.0f)

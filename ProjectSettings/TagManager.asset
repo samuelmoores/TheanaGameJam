@@ -8,6 +8,8 @@ TagManager:
   - Hallway
   - Cell
   - Guard
+  - GuardPlayer
+  - HitBox
   layers:
   - Default
   - TransparentFX

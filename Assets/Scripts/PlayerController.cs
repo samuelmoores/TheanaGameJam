@@ -26,6 +26,8 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public bool shaking = false;
 
     bool ragDoll = true;
+    bool isDamaged = false;
+    float timer_damagedAnim = 1.1f;
 
     // Start is called before the first frame update
     void Start()
@@ -55,6 +57,22 @@ public class PlayerController : MonoBehaviour
             ragDoll = false;
         }
 
+        if(isDamaged && timer_damagedAnim > 0.0f)
+        {
+            timer_damagedAnim -= Time.deltaTime;
+
+        }
+
+        if (timer_damagedAnim < 0.0f)
+        {
+            isDamaged = false;
+            timer_damagedAnim = 1.1f;
+            animator.ResetTrigger("Damaged");
+        }
+
+
+        Debug.Log(isDamaged);
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -78,6 +96,13 @@ public class PlayerController : MonoBehaviour
         {
             GuardCamera.enabled = true;
             HallwayCamera.enabled = false;
+
+        }
+
+        if(other.CompareTag("HitBox") && !isDamaged)
+        {
+            isDamaged = true;
+            animator.SetTrigger("Damaged");
 
         }
 
