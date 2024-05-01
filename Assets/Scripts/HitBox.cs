@@ -36,7 +36,7 @@ public class HitBox : MonoBehaviour
             if(Player.currentHealth > 0.0f)
             {
                 //damage player
-                Player.currentHealth -= 0.1f;
+                //Player.currentHealth -= 0.1f;
 
                 //is player dead?
                 if (Player.currentHealth <= 0.0f)
@@ -45,7 +45,7 @@ public class HitBox : MonoBehaviour
                 }
             }
 
-            
         }
+
     }
 }

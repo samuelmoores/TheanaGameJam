@@ -33,7 +33,7 @@ public class Beetle : MonoBehaviour
 
         //init AI
         agent = GetComponent<NavMeshAgent>();
-        agent.speed = Random.Range(0.01f, 0.1f);
+        agent.speed = Random.Range(0.0f, 0.0f);
         agent.angularSpeed = Random.Range(300, 350);
         agent.acceleration = Random.Range(1, 2);
 

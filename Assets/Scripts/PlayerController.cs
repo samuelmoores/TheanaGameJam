@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,13 +22,14 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public float shakeTimer;
     [HideInInspector] public bool isDead;
 
-
     [HideInInspector] public bool isInfected;
     [HideInInspector] public bool shaking = false;
+    [HideInInspector] public bool attacking = false;
 
     bool ragDoll = true;
     bool isDamaged = false;
     float timer_damagedAnim = 1.1f;
+    float attackCoolDown = 0.5f;
 
     // Start is called before the first frame update
     void Start()
@@ -60,6 +62,7 @@ public class PlayerController : MonoBehaviour
         if(isDamaged && timer_damagedAnim > 0.0f)
         {
             timer_damagedAnim -= Time.deltaTime;
+            playerSpeed = 0.0f;
 
         }
 
@@ -70,9 +73,30 @@ public class PlayerController : MonoBehaviour
             animator.ResetTrigger("Damaged");
         }
 
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            Attack();
+        }
 
-        Debug.Log(isDamaged);
+        if (attacking && attackCoolDown > 0.0f)
+        {
+            attackCoolDown -= Time.deltaTime;
+            playerSpeed = 0.0f;
+        }
+        else
+        {
+            attackCoolDown = 0.5f;
+            playerSpeed = 5.0f;
+            attacking = false;
+        }
 
+
+    }
+
+    private void Attack()
+    {
+        animator.SetTrigger("attack");
+        attacking = true;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -99,12 +123,14 @@ public class PlayerController : MonoBehaviour
 
         }
 
-        if(other.CompareTag("HitBox") && !isDamaged)
+        //if enemy hits player
+        if(other.CompareTag("HitBox") && !isDamaged && !attacking)
         {
             isDamaged = true;
             animator.SetTrigger("Damaged");
 
         }
+
 
     }
 

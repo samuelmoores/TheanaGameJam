@@ -8,9 +8,14 @@ public class Guard : MonoBehaviour
     NavMeshAgent agent;
     GameObject player;
     PlayerController playerController;
-    Animator animator;
+
     float distanceFromPlayer;
     bool playerAlive;
+
+    [HideInInspector] public Animator animator;
+    [HideInInspector] public float health = 1.0f;
+    [HideInInspector] public bool isDead = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -28,7 +33,7 @@ public class Guard : MonoBehaviour
         playerAlive = !playerController.isDead;
 
         //start chasing
-        if(distanceFromPlayer < 10)
+        if(distanceFromPlayer < 10 && !isDead)
         {
             //start attacking
             if(distanceFromPlayer < 0.5f && playerAlive)
