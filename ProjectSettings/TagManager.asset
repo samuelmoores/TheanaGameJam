@@ -8,8 +8,8 @@ TagManager:
   - Hallway
   - Cell
   - Guard
-  - GuardPlayer
   - HitBox
+  - Enemy
   layers:
   - Default
   - TransparentFX

@@ -11,11 +11,13 @@ public class Guard : MonoBehaviour
 
     float distanceFromPlayer;
     bool playerAlive;
+    float damagedCoolDown;
 
     [HideInInspector] public Animator animator;
-    [HideInInspector] public float health = 1.0f;
+    [HideInInspector] public float health = 0.5f;
     [HideInInspector] public bool isDead = false;
-
+    [HideInInspector] public bool damaged = false;
+    [HideInInspector] public bool attacking = false;
 
     // Start is called before the first frame update
     void Start()
@@ -32,32 +34,48 @@ public class Guard : MonoBehaviour
         distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
         playerAlive = !playerController.isDead;
 
-        //start chasing
-        if(distanceFromPlayer < 10 && !isDead)
+        if(damaged && damagedCoolDown > 0.0f)
+        {
+            damagedCoolDown -= Time.deltaTime;
+            Debug.Log("damaged");
+        }
+        else if(!isDead)
+        {
+            damagedCoolDown = 0.5f;
+            damaged = false;
+            animator.SetBool("isDamaged", false);
+
+        }
+
+        //start interacting with player
+        if (distanceFromPlayer < 10 && !isDead)
         {
             //start attacking
-            if(distanceFromPlayer < 0.5f && playerAlive)
+            if(distanceFromPlayer < 0.5f && playerAlive && !damaged && !playerController.attacking)
             {
                 animator.SetBool("isWalking", false);
-
                 animator.SetBool("isAttacking", true);
+                attacking = true;
                 agent.speed = 0.0f;
                 agent.destination = transform.position;
             }
-            //or go back to chasing
-            else if(playerAlive)
+            //or chase
+            else if(playerAlive && !damaged)
             {
                 agent.destination = player.transform.position;
                 animator.SetBool("isWalking", true);
                 animator.SetBool("isAttacking", false);
+                attacking = false;
                 agent.speed = 1.0f;
 
             }
-            //or stop becuase player is dead now
+            //or stop becuase player is dead or guard is damaged
             else
             {
                 animator.SetBool("isWalking", false);
                 animator.SetBool("isAttacking", false);
+                agent.speed = 0.0f;
+
             }
         }
         
