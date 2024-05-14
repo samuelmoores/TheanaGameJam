@@ -37,7 +37,6 @@ public class Guard : MonoBehaviour
         if(damaged && damagedCoolDown > 0.0f)
         {
             damagedCoolDown -= Time.deltaTime;
-            Debug.Log("damaged");
         }
         else if(!isDead)
         {
@@ -51,7 +50,7 @@ public class Guard : MonoBehaviour
         if (distanceFromPlayer < 10 && !isDead)
         {
             //start attacking
-            if(distanceFromPlayer < 0.5f && playerAlive && !damaged && !playerController.attacking)
+            if(distanceFromPlayer < 1.0f && playerAlive && !damaged && !playerController.attacking)
             {
                 animator.SetBool("isWalking", false);
                 animator.SetBool("isAttacking", true);

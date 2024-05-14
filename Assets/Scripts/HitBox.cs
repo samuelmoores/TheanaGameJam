@@ -25,7 +25,7 @@ public class HitBox : MonoBehaviour
         }
         else
         {
-            attackCooldown = 0.75f;
+            attackCooldown = 1.3f;
         }
     }
 

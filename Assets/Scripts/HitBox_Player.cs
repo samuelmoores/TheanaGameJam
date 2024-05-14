@@ -35,7 +35,6 @@ public class HitBox_Player : MonoBehaviour
             {
                 guard.animator.SetBool("isDead", true);
                 guard.isDead = true;
-                animator_guard.SetBool("isDamaged", false);
 
             }
 

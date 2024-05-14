@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
 
     bool ragDoll = true;
     bool isDamaged = false;
-    float timer_damagedAnim = 1.1f;
+    float timer_damagedAnim = 2.0f;
     float attackCoolDown = 0.5f;
 
     // Start is called before the first frame update
@@ -65,6 +65,8 @@ public class PlayerController : MonoBehaviour
 
         SetAttacking();
 
+        Debug.Log(isDamaged);
+
     }
 
 
@@ -96,16 +98,19 @@ public class PlayerController : MonoBehaviour
 
     private void SetIsDamaged()
     {
-        if (isDamaged && timer_damagedAnim > 0.0f)
+        if (timer_damagedAnim > 0.0f)
         {
             timer_damagedAnim -= Time.deltaTime;
+        }
+        else if(isDamaged)
+        {
             playerSpeed = 0.0f;
         }
 
         if (timer_damagedAnim < 0.0f)
         {
             isDamaged = false;
-            timer_damagedAnim = 1.1f;
+            timer_damagedAnim = 2.0f;
             animator.ResetTrigger("Damaged");
         }
     }
@@ -160,7 +165,7 @@ public class PlayerController : MonoBehaviour
         movementDirection.Normalize();
 
         // Forward Movement
-        if (Input.GetKey(KeyCode.W) && !shaking)
+        if (Input.GetKey(KeyCode.W) && !shaking && !isDamaged)
         {
             transform.Translate(transform.forward * verticalInput * playerSpeed * Time.deltaTime, Space.World);
 
