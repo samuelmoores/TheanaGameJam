@@ -9,14 +9,12 @@ public class PlayerController : MonoBehaviour
     public Camera HallwayCamera;
     public Camera GuardCamera;
 
-    public event EventHandler OnDeath;
-
-    Animator animator;
     Collider[] ragdollColliders;
 
     public float playerSpeed;
     public float rotationSpeed;
 
+    [HideInInspector] public Animator animator;
     [HideInInspector] public float currentHealth;
     [HideInInspector] public bool inCell;
     [HideInInspector] public bool inHallway;
@@ -27,10 +25,10 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public bool isInfected;
     [HideInInspector] public bool shaking = false;
     [HideInInspector] public bool attacking = false;
+    [HideInInspector] public bool isDamaged = false;
 
     bool ragDoll = true;
-    bool isDamaged = false;
-    float timer_damagedAnim = 2.0f;
+    float timer_damagedAnim = 1.0f;
     float attackCoolDown = 0.5f;
 
     // Start is called before the first frame update
@@ -65,8 +63,6 @@ public class PlayerController : MonoBehaviour
 
         SetAttacking();
 
-        Debug.Log(isDamaged);
-
     }
 
 
@@ -98,21 +94,19 @@ public class PlayerController : MonoBehaviour
 
     private void SetIsDamaged()
     {
-        if (timer_damagedAnim > 0.0f)
+        if(isDamaged)
         {
-            timer_damagedAnim -= Time.deltaTime;
-        }
-        else if(isDamaged)
-        {
-            playerSpeed = 0.0f;
+            if (timer_damagedAnim > 0)
+            {
+                timer_damagedAnim -= Time.deltaTime;
+            }
+            else
+            {
+                isDamaged = false;
+                timer_damagedAnim = 1.0f;
+            }
         }
 
-        if (timer_damagedAnim < 0.0f)
-        {
-            isDamaged = false;
-            timer_damagedAnim = 2.0f;
-            animator.ResetTrigger("Damaged");
-        }
     }
 
     private void Attack()
@@ -232,7 +226,6 @@ public class PlayerController : MonoBehaviour
         //set infected and manage health
         if (isInfected)
         {
-            Debug.Log("Infected");
             playerSpeed = 0.75f;
             animator.SetBool("isInfected", true);
 

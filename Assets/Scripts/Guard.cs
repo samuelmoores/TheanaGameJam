@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -79,4 +80,25 @@ public class Guard : MonoBehaviour
         }
         
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Player_DamageBox") && playerController.attacking)
+        {
+            Debug.Log("Guard hit by player");
+
+            damaged = true;
+            health -= 0.1f;
+            animator.SetBool("isDamaged", true);
+
+            if (health < 0.0f && !isDead)
+            {
+                animator.SetBool("isDead", true);
+                isDead = true;
+
+            }
+        }
+    }
 }
+
+

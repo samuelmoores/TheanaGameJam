@@ -5,7 +5,6 @@ using UnityEngine;
 public class HitBox : MonoBehaviour
 {
     float attackCooldown = 0.0f;
-    bool attacking = false;
     PlayerController Player;
     Guard guard;
 
@@ -31,7 +30,7 @@ public class HitBox : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player") && guard.attacking)
+        if(other.CompareTag("Player") && guard.attacking && !Player.isDamaged)
         {
             attackCooldown = 0.0f;
 
@@ -39,6 +38,9 @@ public class HitBox : MonoBehaviour
             {
                 //damage player
                 Player.currentHealth -= 0.1f;
+                Player.isDamaged = true;
+                Player.animator.SetTrigger("Damaged");
+
 
                 //is player dead?
                 if (Player.currentHealth <= 0.0f)

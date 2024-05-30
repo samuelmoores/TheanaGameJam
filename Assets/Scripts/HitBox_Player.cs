@@ -6,7 +6,6 @@ public class HitBox_Player : MonoBehaviour
 {
     PlayerController player;
     Guard guard;
-    int attackTracker = 0;
     Animator animator_guard;
 
     // Start is called before the first frame update
@@ -25,7 +24,7 @@ public class HitBox_Player : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Enemy") && player.attacking)
+        if(other.CompareTag("Enemy1") && player.attacking)
         {
             guard.damaged = true;
             guard.health -= 0.1f;
