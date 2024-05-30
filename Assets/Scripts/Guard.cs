@@ -35,20 +35,23 @@ public class Guard : MonoBehaviour
         distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
         playerAlive = !playerController.isDead;
 
+        Debug.Log(health);
+
         if(damaged && damagedCoolDown > 0.0f)
         {
             damagedCoolDown -= Time.deltaTime;
+            agent.speed = 0.0f;
+
         }
         else if(!isDead)
         {
             damagedCoolDown = 0.5f;
             damaged = false;
-            animator.SetBool("isDamaged", false);
 
         }
 
         //start interacting with player
-        if (distanceFromPlayer < 10 && !isDead)
+        if (distanceFromPlayer < 10 && !isDead && !damaged)
         {
             //start attacking
             if(distanceFromPlayer < 1.0f && playerAlive && !damaged && !playerController.attacking)
@@ -83,18 +86,16 @@ public class Guard : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player_DamageBox") && playerController.attacking)
+        if(other.CompareTag("Player_DamageBox") && playerController.attacking && !isDead)
         {
-            Debug.Log("Guard hit by player");
-
             damaged = true;
-            health -= 0.1f;
-            animator.SetBool("isDamaged", true);
+            health -= 0.3f;
+            animator.SetTrigger("Damaged");
 
-            if (health < 0.0f && !isDead)
+            if (health < 0.0f)
             {
-                animator.SetBool("isDead", true);
                 isDead = true;
+                animator.SetBool("isDead", true);
 
             }
         }

@@ -24,21 +24,17 @@ public class HitBox_Player : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Enemy1") && player.attacking)
+        if(other.CompareTag("Enemy") && player.attacking)
         {
             guard.damaged = true;
             guard.health -= 0.1f;
-            animator_guard.SetBool("isDamaged", true);
+            animator_guard.SetTrigger("Damaged");
+            Debug.Log("Damage Guard");
 
             if(guard.health < 0.0f && !guard.isDead)
             {
-                guard.animator.SetBool("isDead", true);
                 guard.isDead = true;
-
             }
-
-
         }
-
     }
 }
