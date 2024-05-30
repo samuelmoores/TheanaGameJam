@@ -35,8 +35,6 @@ public class Guard : MonoBehaviour
         distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
         playerAlive = !playerController.isDead;
 
-        Debug.Log(health);
-
         if(damaged && damagedCoolDown > 0.0f)
         {
             damagedCoolDown -= Time.deltaTime;
